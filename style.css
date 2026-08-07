@@ -541,15 +541,44 @@ footer {
         grid-template-columns: 1fr;
     }
 }
-/* --- REGOLE PER SMARTPHONE --- */
+/* --- CORRETTIVO DEFINITIVO PER SMARTPHONE --- */
 @media (max-width: 768px) {
-    body {
-        padding: 10px;
+    /* 1. Blocca lo sforo orizzontale e adatta la pagina al display */
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
-    
-    /* Riduci elementi troppo grandi per lo schermo piccolo */
-    .header-logo {
-        width: 70px !important;
-        height: 70px !important;
+
+    /* 2. Riduiniamo i margini e forziamo i blocchi principali a rientrare nello schermo (92% della larghezza) */
+    div, section, main, header, footer {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Sistema il grande blocco centrale e i box dei prodotti */
+    .hero, .banner, .card, .catalogo, .product-container, [class*="box"], [class*="card"] {
+        width: 92% !important;
+        max-width: 92% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Sistema i bottoni in alto per farli andare a capo ordinatamente senza uscire */
+    header, .header-buttons, .top-bar {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        padding: 10px !important;
+    }
+
+    /* 5. Se si apre un prodotto/modale, lo facciamo rientrare perfettamente nello schermo */
+    .modal, .popup, .product-modal, .lightbox {
+        width: 95% !important;
+        max-width: 95% !important;
+        left: 2.5% !important;
+        transform: none !important;
+        box-sizing: border-box !important;
     }
 }
