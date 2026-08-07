@@ -542,14 +542,37 @@ footer {
     }
 }
 /* --- CORRETTIVO DEFINITIVO PER SMARTPHONE --- */
+/* --- CORRETTIVO PER IL MENU CATEGORIE SU MOBILE --- */
 @media (max-width: 768px) {
-    /* --- 1. RISOLVE LO SFORO ORIZZONTALE --- */
-    body, html {
-        overflow-x: hidden !important;
+    /* Rende il contenitore delle categorie una colonna verticale pulita */
+    .category-menu, .categories, .menu-categorie, [class*="category-container"], [class*="categoria-container"] {
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        gap: 10px !important;
         width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
+    }
+    
+    /* Evita che i singoli pulsanti o voci si sovrappongano l'uno sull'altro */
+    .category-item, .category-btn, .categoria-link, 
+    [class*="category"] a, [class*="categoria"] a, 
+    [class*="category"] button, [class*="categoria"] button {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        clear: both !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        pointer-events: auto !important;
+        z-index: 10 !important;
+    }
+}
     }
 
     /* --- 2. ADATTA I CONTENITORI --- */
