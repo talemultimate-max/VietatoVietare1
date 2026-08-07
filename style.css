@@ -541,8 +541,9 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+/* --- CORRETTIVO DEFINITIVO PER SMARTPHONE --- */
 @media (max-width: 768px) {
-    /* 1. Blocca lo sforo orizzontale */
+    /* --- 1. RISOLVE LO SFORO ORIZZONTALE (dalla risposta precedente) --- */
     body, html {
         overflow-x: hidden !important;
         width: 100% !important;
@@ -551,14 +552,67 @@ footer {
         box-sizing: border-box !important;
     }
 
-    /* 2. Sistema l'immagine quando apri il prodotto (evita lo zoom eccessivo) */
-    img, .modal img, .popup img, [class*="modal"] img, [class*="popup"] img, [class*="lightbox"] img {
-        max-width: 85vw !important;
-        max-height: 65vh !important;
-        width: auto !important;
-        height: auto !important;
-        object-fit: contain !important;
-        display: block !important;
+    /* --- 2. ADATTA I CONTENITORI (dalla risposta precedente) --- */
+    div, section, main, header, footer, .container, .main-content {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* --- 3. RIMPIATTISCE E ADATTA IL MODALE/POPUP DEL PRODOTTO (LA NOVITÀ) --- */
+    /* Nota: Le classi qui sotto (.product-modal, .modal, ecc.) sono comuni, 
+       potresti dover adattare i nomi se usi nomi diversi nel tuo codice.
+       Usa l'ispettore del browser per trovare i nomi esatti se non funziona. */
+    
+    .product-modal, .modal, .popup-container, .lightbox-overlay {
+        width: 95% !important;
+        max-width: 95% !important;
+        height: auto !important; /* Permette all'altezza di adattarsi */
+        max-height: 95vh !important; /* Il popup non sarà MAI più alto del 95% dello schermo */
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important; /* Lo tiene perfettamente centrato */
+        overflow-y: auto !important; /* Se il contenuto è lungo, appare la barra di scorrimento DENTRO il popup */
+        border-radius: 15px !important;
+        z-index: 9999 !important;
+        padding: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3b. Adatta l'immagine principale all'interno del popup */
+    .product-modal-img, .modal-main-image, .popup-image {
+        max-width: 100% !important;
+        max-height: 50vh !important; /* Limita l'immagine a metà dell'altezza dello schermo */
+        object-fit: contain !important; /* Mantiene le proporzioni dell'immagine senza distorcerla */
         margin: 0 auto !important;
+    }
+
+    /* 3c. Adatta le miniature (thumbnails) sotto l'immagine */
+    .product-modal-thumbnails, .modal-thumbnails-container, .popup-thumbnails {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 5px !important;
+        margin-top: 15px !important;
+    }
+
+    .thumbnail-img, .modal-thumbnail {
+        width: 60px !important; /* Imposta una dimensione fissa per le miniature */
+        height: 60px !important;
+        object-fit: cover !important;
+        border: 1px solid #ddd !important;
+        border-radius: 5px !important;
+    }
+
+    /* 3d. Rimpicciolisce il testo all'interno del popup per mobile */
+    .product-modal-title, .modal-title {
+        font-size: 18px !important;
+        margin-top: 10px !important;
+    }
+    .product-modal-price, .modal-price {
+        font-size: 16px !important;
+        color: #e91e63 !important;
     }
 }
