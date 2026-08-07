@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vietatovietare - A&S Accessories & Allestimenti</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-pink: #ff2a85;
+            --secondary-pink: #ff75bc;
+            --soft-pink-bg: #fff0f6;
+            --dark-text: #2d2d2d;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5f8 0%, #ffffff 50%, #fff0f5 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 117, 188, 0.2);
+            box-shadow: 0 4px 20px rgba(255, 42, 133, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* STILI AGGIUNTI PER RECENSIONI A SINISTRA E BADGE LAMPEGGIANTI A DESTRA */
+        .nav-left-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .rotating-reviews {
+            background: #fff0f6;
+            border: 1px solid #ffd1e8;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            max-width: 320px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: 0 2px 10px rgba(255, 42, 133, 0.05);
+        }
+
+        .review-stars {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+
+        .nav-right-flashing {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        @keyframes blinker {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.03); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .flash-badge {
+            background: linear-gradient(135deg, #ff2a85, #ff75bc);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: blinker 2s infinite ease-in-out;
+            box-shadow: 0 3px 10px rgba(255, 42, 133, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flash-badge.alt {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #ffffff;
+            border: 2px solid #ffd1e8;
+            padding: 12px 26px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #777;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-pink), var(--secondary-pink));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 42, 133, 0.35);
+        }
+
+        .section-category-container {
+            width: 100%;
+            grid-column: 1 / -1;
+            margin: 40px 0 20px 0;
+            text-align: left;
+            position: relative;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ffd1e8;
+        }
+
+        .section-category-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-pink), var(--secondary-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .product-card {
+            animation: cardEntrance 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            border: 1px solid rgba(255, 117, 188, 0.15);
+            border-radius: 20px;
+            overflow: hidden;
+            background: #ffffff;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(255, 42, 133, 0.15);
+            border-color: rgba(255, 42, 133, 0.3);
+        }
+
+        .product-slider img {
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-slider img.active {
+            transform: scale(1.04);
+        }
+
+        .badge {
+            background: linear-gradient(135deg, var(--primary-pink), var(--secondary-pink)) !important;
+            color: white !important;
+            border-radius: 20px !important;
+            padding: 6px 14px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(255, 42, 133, 0.3);
+        }
+
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25d366, #128c7e) !important;
+            transition: all 0.3s ease !important;
+            border-radius: 30px !important;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left-banner">
+            <a href="#" class="nav-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700;">
+                <img src="images/logo.jpg" alt="Logo Vietatovietare" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                <span>Vietatovietare</span>
+            </a>
+            <!-- RECENSIONI SCORREVOLI A SINISTRA -->
+            <div class="rotating-reviews" id="rotatingReviews">
+                <span class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                <span id="reviewText">"Davvero fantastica, puntuale e prezzo onesto!"</span>
+            </div>
+        </div>
+
+        <!-- SCRITTE LAMPEGGIANTI A DESTRA -->
+        <div class="nav-right-flashing">
+            <div class="flash-badge"><i class="fas fa-shipping-fast"></i> Spedizione in 24h</div>
+            <div class="flash-badge alt"><i class="fas fa-gem"></i> Ottima Qualità</div>
+            <a href="https://www.instagram.com/_vietatovietare_official_" class="nav-link-item" target="_blank" style="color: #555; font-size: 1.2rem; margin-left: 5px;"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20generali." class="whatsapp-btn" target="_blank" style="padding: 8px 16px; color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fab fa-whatsapp"></i> Contattaci
+            </a>
+        </div>
+    </nav>
+    <header class="hero" style="text-align: center; padding: 40px 20px;">
+        <div class="container">
+            <div class="reviews-container">
+  <div class="reviews-track">
+    <!-- Blocco Recensioni 1 -->
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Allestimenti semplicemente unici! Hanno reso il nostro evento indimenticabile."</p>
+      <span class="review-author">— Martina R.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Accessori originali e curati nei minimi dettagli. Spedizione velocissima!"</p>
+      <span class="review-author">— Elisa V.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Idee davvero fuori dagli schemi, finalmente qualcosa di originale. Consigliatissimo!"</p>
+      <span class="review-author">— Marco B.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Qualità eccellente e un'attenzione al cliente davvero rara da trovare."</p>
+      <span class="review-author">— Chiara L.</span>
+    </div>
+
+    <!-- Blocco Recensioni 2 (duplicato per rendere lo scorrimento infinito e senza scatti) -->
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Allestimenti semplicemente unici! Hanno reso il nostro evento indimenticabile."</p>
+      <span class="review-author">— Martina R.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Accessori originali e curati nei minimi dettagli. Spedizione velocissima!"</p>
+      <span class="review-author">— Elisa V.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Idee davvero fuori dagli schemi, finalmente qualcosa di originale. Consigliatissimo!"</p>
+      <span class="review-author">— Marco B.</span>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Qualità eccellente e un'attenzione al cliente davvero rara da trovare."</p>
+      <span class="review-author">— Chiara L.</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Stili incorporati per evitare errori di collegamento */
+  .reviews-container {
+    width: 45%;
+    overflow: hidden;
+    position: relative;
+    padding: 10px 0;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+
+  .reviews-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scrollReviews 25s linear infinite;
+  }
+
+  .reviews-track:hover {
+    animation-play-state: paused;
+  }
+
+  .review-card {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 15px 20px;
+    width: 260px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+  }
+
+  .review-card .stars {
+    color: #ffc107;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .review-card .review-text {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+    color: #f0f0f0;
+  }
+
+  .review-card .review-author {
+    font-size: 11px;
+    color: #ff94b8;
+    font-style: italic;
+  }
+
+  @keyframes scrollReviews {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+</style>
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="Logo Vietatovietare Principale" class="header-logo" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px;">
+            </div>
+            <h1 class="logo-title" style="font-size: 2.5rem; margin-bottom: 10px;">Vietato<span>vietare</span></h1>
+            <p class="tagline" style="color: #f1efef; font-size: 1.1rem;">Allestimenti unici, accessori originali e idee fuori dagli schemi.</p>
+        </div>
+    </header>
+    <main class="container" id="catalogo">
+        <section class="catalog-section">
+            <div class="catalog-header" style="text-align: center; margin-bottom: 30px;">
+                <h2>Il Nostro Catalogo</h2>
+                <p>Esplora le categorie o clicca su una foto per scoprire tutti i dettagli.</p>
+            </div>
+
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="filterCategory('all', this)">Tutti i Prodotti</button>
+                <button class="filter-btn" onclick="filterCategory('allestimenti', this)"><i class="fas fa-star"></i> Allestimenti</button>
+                <button class="filter-btn" onclick="filterCategory('borse', this)"><i class="fas fa-shopping-bag"></i> Borse</button>
+                <button class="filter-btn" onclick="filterCategory('regali', this)"><i class="fas fa-gift"></i> Regali e Fiocchi</button>
+            </div>
+
+            <div class="product-grid" id="productGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+                
+                <!-- SEZIONE: ALLESTIMENTI -->
+                <div class="section-category-container cat-header-allestimenti">
+                    <h3 class="section-category-title"><i class="fas fa-magic"></i> Allestimenti Scenografici</h3>
+                </div>
+
+                <!-- PRODOTTO 1: Allestimento Tema Barbie -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-barbie" data-title="Allestimento Completo Tema Barbie" data-price="€ 1,00" data-desc="Scenografico allestimento compleanno a tema Barbie con scatola/box foto, sagome Chanel e Make-up, palloncini e insegna luminosa Happy Birthday." data-images='["images/SnapInsta.to_562132142_18061550729431643_3016227668807016440_n.jpg", "images/SnapInsta.to_562766262_18061550747431643_6264606358701014598_n.jpg", "images/SnapInsta.to_562812625_18061550738431643_6484937422740866314_n.jpg", "images/SnapInsta.to_562844111_18061550717431643_7470889693483956655_n.jpg", "images/SnapInsta.to_564307165_18061550708431643_6644045078842673392_n.jpg"]'>
+                    <div class="product-slider" id="slider-allestimento-barbie" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_562132142_18061550729431643_3016227668807016440_n.jpg" alt="Allestimento Barbie 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_562766262_18061550747431643_6264606358701014598_n.jpg" alt="Allestimento Barbie 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_562812625_18061550738431643_6484937422740866314_n.jpg" alt="Allestimento Barbie 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_562844111_18061550717431643_7470889693483956655_n.jpg" alt="Allestimento Barbie 4" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_564307165_18061550708431643_6644045078842673392_n.jpg" alt="Allestimento Barbie 5" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-barbie', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-barbie', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Spettacolare</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Completo Tema Barbie</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Scenografico allestimento compleanno a tema Barbie con scatola/box foto, sagome Chanel e Make-up.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Completo%20Tema%20Barbie" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 2: Allestimento Tema Spider-Man -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-spiderman" data-title="Allestimento Completo Tema Spider-Man" data-price="€ 1,00" data-desc="Scenografico allestimento compleanno a tema Spider-Man con arco di palloncini colorati, sagome dei grattacieli cittadini, pannello personalizzato, gadget e sacchetti regalo." data-images='["images/SnapInsta.to_549818490_18058575647431643_7159502883597663815_n.jpg", "images/SnapInsta.to_549704009_18058575683431643_6428135814248181508_n.jpg", "images/SnapInsta.to_549666259_18058575656431643_2532894622029709900_n.jpg", "images/SnapInsta.to_549238603_18058575674431643_5936244651390640769_n.jpg", "images/SnapInsta.to_548967059_18058575692431643_1869406503930176049_n.jpg", "images/SnapInsta.to_548867469_18058575665431643_4953530609596502169_n.jpg"]'>
+                    <div class="product-slider" id="slider-allestimento-spiderman" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_549818490_18058575647431643_7159502883597663815_n.jpg" alt="Allestimento Spider-Man 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_549704009_18058575683431643_6428135814248181508_n.jpg" alt="Allestimento Spider-Man 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_549666259_18058575656431643_2532894622029709900_n.jpg" alt="Allestimento Spider-Man 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_549238603_18058575674431643_5936244651390640769_n.jpg" alt="Allestimento Spider-Man 4" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_548967059_18058575692431643_1869406503930176049_n.jpg" alt="Allestimento Spider-Man 5" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_548867469_18058575665431643_4953530609596502169_n.jpg" alt="Allestimento Spider-Man 6" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-spiderman', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-spiderman', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Novità</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Completo Tema Spider-Man</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Scenografico allestimento compleanno a tema Spider-Man con arco palloncini, sagome e grattacieli.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Completo%20Tema%20Spider-Man" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 3: Allestimento Gender Reveal (Boy or Girl) -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-gender-reveal" data-title="Allestimento Scenografico Gender Reveal" data-price="€ 1,00" data-desc="Meraviglioso allestimento per Gender Reveal con arco di palloncini bicolore (azzurro e rosa), scritta luminosa 'Oh Baby' e torri di cubi trasparenti con lettere BOY e GIRL." data-images='["images/SnapInsta.to_518488148_18051952094431643_1821593492702188946_n.jpg", "images/SnapInsta.to_517289920_18051952076431643_5850120842254712576_n.jpg", "images/SnapInsta.to_518055566_18051952067431643_1403497420176986808_n.jpg"]'>
+                    <div class="product-slider" id="slider-allestimento-gender-reveal" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_518488148_18051952094431643_1821593492702188946_n.jpg" alt="Gender Reveal 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_517289920_18051952076431643_5850120842254712576_n.jpg" alt="Gender Reveal 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_518055566_18051952067431643_1403497420176986808_n.jpg" alt="Gender Reveal 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-gender-reveal', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-allestimento-gender-reveal', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Emozione</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Scenografico Gender Reveal</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Allestimento per Gender Reveal con arco di palloncini azzurro/rosa, scritta 'Oh Baby' e cubi BOY/GIRL.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Scenografico%20Gender%20Reveal" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NUOVO ALLESTIMENTO 1: Comunione con sfumatura gialla accentuata -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-comunione-gialla" data-title="Allestimento Comunione (Sfumatura Gialla)" data-price="€ 1,00" data-desc="Allestimento a tema Comunione caratterizzato da toni caldi, sfumature gialle accentuate sullo sfondo, arco di palloncini rosa/oro e dettagli floreali." data-images='["images/SnapInsta.to_497067032_18046349441431643_8359745906004687229_n.jpg", "images/SnapInsta.to_497176072_18046387952431643_6037406980443088819_n.jpg", "images/SnapInsta.to_497369233_18046387943431643_2740274747136032093_n.jpg"]'>
+                    <div class="product-slider" id="slider-comunione-gialla" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_497067032_18046349441431643_8359745906004687229_n.jpg" alt="Comunione Giallo 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_497176072_18046387952431643_6037406980443088819_n.jpg" alt="Comunione Giallo 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_497369233_18046387943431643_2740274747136032093_n.jpg" alt="Comunione Giallo 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-comunione-gialla', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-comunione-gialla', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Nuovo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Comunione (Sfumatura Gialla)</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Allestimento Comunione con toni caldi, sfumature gialle accentuate sullo sfondo e arco palloncini rosa/oro.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Comunione%20Sfumatura%20Gialla" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NUOVO ALLESTIMENTO 2: Comunione Standard (Struttura Circolare) -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-comunione-standard" data-title="Allestimento Comunione (Struttura Circolare)" data-price="€ 1,00" data-desc="Allestimento Comunione pulito con struttura circolare, palloncini rosa, bianchi e dettagli oro." data-images='["images/SnapInsta.to_491443200_18046349423431643_4387939783559613518_n.jpg", "images/SnapInsta.to_497238627_18046349402431643_5376569228332891275_n.jpg", "images/SnapInsta.to_497332370_18046387961431643_2506547592028027266_n.jpg", "images/SnapInsta.to_497425566_18046349432431643_6984901919931865871_n.jpg"]'>
+                    <div class="product-slider" id="slider-comunione-standard" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_491443200_18046349423431643_4387939783559613518_n.jpg" alt="Comunione Normale 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_497238627_18046349402431643_5376569228332891275_n.jpg" alt="Comunione Normale 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_497332370_18046387961431643_2506547592028027266_n.jpg" alt="Comunione Normale 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_497425566_18046349432431643_6984901919931865871_n.jpg" alt="Comunione Normale 4" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-comunione-standard', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-comunione-standard', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Elegante</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Comunione (Struttura Circolare)</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Allestimento Comunione pulito con struttura circolare, palloncini rosa, bianchi e dettagli oro.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Comunione%20Struttura%20Circolare" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NUOVO ALLESTIMENTO 3: Diciottesimo (Giallo e Nero) -->
+                <div class="product-card" data-category="allestimenti" data-id="allestimento-diciottesimo" data-title="Allestimento Diciottesimo (Giallo e Nero)" data-price="€ 1,00" data-desc="Allestimento per festa di 18esimo anno con pannello scuro/stellato, numeri giganti, palloncini neri e oro e confettata dedicata." data-images='["images/SnapInsta.to_504874331_18049464362431643_2425164268773370867_n.jpg", "images/SnapInsta.to_505733456_18049464344431643_7691829341115699317_n.jpg", "images/SnapInsta.to_506086497_18049464335431643_2819777089753801435_n.jpg"]'>
+                    <div class="product-slider" id="slider-diciottesimo" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_504874331_18049464362431643_2425164268773370867_n.jpg" alt="Diciottesimo 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_505733456_18049464344431643_7691829341115699317_n.jpg" alt="Diciottesimo 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_506086497_18049464335431643_2819777089753801435_n.jpg" alt="Diciottesimo 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-diciottesimo', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-diciottesimo', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">18 Anni</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Allestimento Diciottesimo (Giallo e Nero)</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Allestimento per festa di 18esimo anno con pannello scuro/stellato, numeri giganti, palloncini neri e oro.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20informazioni%20per%20questo%20articolo:%20Allestimento%20Diciottesimo%20Giallo%20e%20Nero" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Richiedi Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- SEZIONE: BORSE -->
+                <div class="section-category-container cat-header-borse">
+                    <h3 class="section-category-title"><i class="fas fa-shopping-bag"></i> Borse e Accessori Artigianali</h3>
+                </div>
+
+                <!-- PRODOTTO 4: Borsa in Velluto Nero -->
+                <div class="product-card" data-category="borse" data-id="borsa-velluto-nero" data-title="Borsa a Mano in Velluto Nero" data-price="€ 1,00" data-desc="Elegante borsa artigianale realizzata in morbido filato effetto velluto nero, con manico intrecciato e tracolla a catena metallica." data-images='["images/SnapInsta.to_553323304_18059493845431643_3868552671607934322_n.jpg", "images/SnapInsta.to_553376227_18059493836431643_673634013222179471_n.jpg", "images/SnapInsta.to_553369867_18059493827431643_1315666922098721701_n.jpg"]'>
+                    <div class="product-slider" id="slider-borsa-velluto-nero" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_553323304_18059493845431643_3868552671607934322_n.jpg" alt="Borsa Velluto Nero 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_553376227_18059493836431643_673634013222179471_n.jpg" alt="Borsa Velluto Nero 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_553369867_18059493827431643_1315666922098721701_n.jpg" alt="Borsa Velluto Nero 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-velluto-nero', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-velluto-nero', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Artigianale</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Borsa a Mano in Velluto Nero</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Elegante borsa artigianale in morbido filato effetto velluto nero con manico intrecciato e catena.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Borsa%20a%20Mano%20in%20Velluto%20Nero" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 5: Borsa a Mano Effetto Iridescente -->
+                <div class="product-card" data-category="borse" data-id="borsa-iridescente" data-title="Borsa a Mano Effetto Iridescente" data-price="€ 1,00" data-desc="Splendida borsa a mano artigianale con lavorazione intrecciata e particolare filato metallizzato multicolore cangiante (sfumature verdi, viola, blu e oro), chiusura a scatto dorata e tracolla a catena." data-images='["images/SnapInsta.to_534314161_18055825337431643_3033400815825389534_n.jpg", "images/SnapInsta.to_534320659_18055825328431643_8703191473105388058_n.jpg", "images/SnapInsta.to_535602662_18055825319431643_6371360728281973362_n.jpg"]'>
+                    <div class="product-slider" id="slider-borsa-iridescente" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_534314161_18055825337431643_3033400815825389534_n.jpg" alt="Borsa Iridescente 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_534320659_18055825328431643_8703191473105388058_n.jpg" alt="Borsa Iridescente 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_535602662_18055825319431643_6371360728281973362_n.jpg" alt="Borsa Iridescente 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-iridescente', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-iridescente', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Esclusivo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Borsa a Mano Effetto Iridescente</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Borsa artigianale intrecciata con filato cangiante multicolore, chiusura dorata e catena.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Borsa%20a%20Mano%20Effetto%20Iridescente" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 6: Borsa a Mano Bronzo/Oro con Dettagli a V -->
+                <div class="product-card" data-category="borse" data-id="borsa-bronzo-oro" data-title="Borsa a Mano Artigianale Bronzo/Oro" data-price="€ 1,00" data-desc="Raffinata borsa a mano artigianale color bronzo/oro con lavorazione a trama fitta, impreziosita da dettagli angolari metallici lavorati e chiusura a scatto dorata con tracolla a catena." data-images='["images/SnapInsta.to_528440467_18054825791431643_3373371465079813767_n.jpg", "images/SnapInsta.to_528871887_18054825782431643_2909578827288579158_n.jpg", "images/SnapInsta.to_529829726_18054825773431643_1282325022137354975_n.jpg"]'>
+                    <div class="product-slider" id="slider-borsa-bronzo-oro" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_528440467_18054825791431643_3373371465079813767_n.jpg" alt="Borsa Bronzo Oro 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_528871887_18054825782431643_2909578827288579158_n.jpg" alt="Borsa Bronzo Oro 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_529829726_18054825773431643_1282325022137354975_n.jpg" alt="Borsa Bronzo Oro 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-bronzo-oro', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-borsa-bronzo-oro', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Elegante</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Borsa a Mano Artigianale Bronzo/Oro</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Borsa artigianale color bronzo/oro con trama fitta, angolari metallici decorati e chiusura dorata.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Borsa%20a%20Mano%20Artigianale%20Bronzo/Oro" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 7: Pochette Marrone con Perle -->
+                <div class="product-card" data-category="borse" data-id="pochette-marrone-perle" data-title="Pochette Marrone con Perle" data-price="€ 1,00" data-desc="Raffinata pochette color marrone/senape decorata con perle applicate e chiusura metallica dorata, dotata di catenella." data-images='["images/SnapInsta.to_555080722_18059595770431643_32639154050025212_n.jpg", "images/SnapInsta.to_554808019_18059595752431643_1553520837690517154_n.jpg", "images/SnapInsta.to_556114539_18059595761431643_4456452095970162322_n.jpg"]'>
+                    <div class="product-slider" id="slider-pochette-marrone-perle" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_555080722_18059595770431643_32639154050025212_n.jpg" alt="Pochette Marrone Perle 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_554808019_18059595752431643_1553520837690517154_n.jpg" alt="Pochette Marrone Perle 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_556114539_18059595761431643_4456452095970162322_n.jpg" alt="Pochette Marrone Perle 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-pochette-marrone-perle', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-pochette-marrone-perle', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Nuovo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Pochette Marrone con Perle</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Pochette marrone decorata con perle e chiusura metallica dorata.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Pochette%20Marrone%20con%20Perle" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- SEZIONE: REGALI E FIOCCHI -->
+                <div class="section-category-container cat-header-regali">
+                    <h3 class="section-category-title"><i class="fas fa-gift"></i> Regali, Cesti e Fiocchi Nascita</h3>
+                </div>
+
+                <!-- PRODOTTO 8: Cesto Regalo LOVE con Orsetto -->
+                <div class="product-card" data-category="regali" data-id="cesto-regalo-love" data-title="Cesto Regalo LOVE con Orsetto" data-price="€ 1,00" data-desc="Splendido cesto regalo in legno con scritta LOVE, contenente un soffice orsetto bianco e accessori coordinati, confezionato con fiocchi dorati." data-images='["images/SnapInsta.to_628439296_18073328951431643_8810385534806845158_n.jpg", "images/SnapInsta.to_629337973_18073328942431643_2557430809549260464_n.jpg"]'>
+                    <div class="product-slider" id="slider-cesto-regalo-love" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_628439296_18073328951431643_8810385534806845158_n.jpg" alt="Cesto Regalo LOVE 1" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_629337973_18073328942431643_2557430809549260464_n.jpg" alt="Cesto Regalo LOVE 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-cesto-regalo-love', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-cesto-regalo-love', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Idea Regalo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Cesto Regalo LOVE con Orsetto</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Cesto regalo in legno con scritta LOVE, orsetto bianco e confezione regalo con fiocchi dorati.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Cesto%20Regalo%20LOVE%20con%20Orsetto" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 9: Fiocco Nascita Isabel (Modello Cuore) -->
+                <div class="product-card" data-category="regali" data-id="isabel-cuore" data-title="Fiocco Nascita Isabel (Modello Cuore)" data-price="€ 1,00" data-desc="Elegante fiocco nascita rosa con cuore in tessuto, perline, rose e farfalle dorate." data-images='["images/isabel.jpg", "images/isabel-1.jpg", "images/isabel-2.jpg"]'>
+                    <div class="product-slider" id="slider-isabel-cuore" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/isabel.jpg" alt="Fiocco Isabel Cuore" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/isabel-1.jpg" alt="Fiocco Isabel Cuore Dettaglio 1" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/isabel-2.jpg" alt="Fiocco Isabel Cuore Dettaglio 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-isabel-cuore', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-isabel-cuore', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Esclusivo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Fiocco Nascita Isabel (Modello Cuore)</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Elegante fiocco nascita rosa con cuore in tessuto, perline, rose e farfalle dorate.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Fiocco%20Nascita%20Isabel%20(Modello%20Cuore)" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 10: Fiocco Nascita Isabel (Modello Corona di Fiori) -->
+                <div class="product-card" data-category="regali" data-id="isabel-corona" data-title="Fiocco Nascita Isabel (Modello Corona)" data-price="€ 1,00" data-desc="Elegante fiocco nascita rosa personalizzato con nome Isabel, corona di fiori in tulle e grande fiocco con dettagli glitterati." data-images='["images/SnapInsta.to_729754519_18088141943431643_6048530318786135903_n.jpg", "images/SnapInsta.to_728922240_18088141979431643_3231426471909382251_n.jpg", "images/SnapInsta.to_728745034_18088141988431643_8119416670230536058_n.jpg", "images/SnapInsta.to_728162654_18088141961431643_4693241302835124486_n.jpg", "images/SnapInsta.to_727903929_18088141952431643_5610688842740881067_n.jpg", "images/SnapInsta.to_727403248_18088141970431643_4184054722755060099_n.jpg"]'>
+                    <div class="product-slider" id="slider-isabel-corona" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_729754519_18088141943431643_6048530318786135903_n.jpg" alt="Fiocco Isabel Corona" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_728922240_18088141979431643_3231426471909382251_n.jpg" alt="Fiocco Isabel Corona Dettaglio 1" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_728745034_18088141988431643_8119416670230536058_n.jpg" alt="Fiocco Isabel Corona Dettaglio 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_728162654_18088141961431643_4693241302835124486_n.jpg" alt="Fiocco Isabel Corona Dettaglio 3" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_727903929_18088141952431643_5610688842740881067_n.jpg" alt="Fiocco Isabel Corona Dettaglio 4" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_727403248_18088141970431643_4184054722755060099_n.jpg" alt="Fiocco Isabel Corona Dettaglio 5" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-isabel-corona', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-isabel-corona', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Esclusivo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Fiocco Nascita Isabel (Modello Corona)</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Elegante fiocco nascita rosa personalizzato con nome Isabel e corona di fiori.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Fiocco%20Nascita%20Isabel%20(Modello%20Corona)" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 11: Fiocco Nascita Frida -->
+                <div class="product-card" data-category="regali" data-id="frida" data-title="Fiocco Nascita Frida" data-price="€ 1,00" data-desc="Splendido fiocco nascita personalizzato con nome Frida, tulle rosa e farfalle glitterate." data-images='["images/SnapInsta.to_731058995_18088729937431643_2714988182704901459_n.jpg", "images/SnapInsta.to_731105067_18088729946431643_6523291729048538642_n.jpg", "images/SnapInsta.to_732092101_18088729928431643_4958697239889717490_n.jpg"]'>
+                    <div class="product-slider" id="slider-frida" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_731058995_18088729937431643_2714988182704901459_n.jpg" alt="Fiocco Nascita Frida" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_731105067_18088729946431643_6523291729048538642_n.jpg" alt="Fiocco Nascita Frida Dettaglio 1" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_732092101_18088729928431643_4958697239889717490_n.jpg" alt="Fiocco Nascita Frida Dettaglio 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-frida', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-frida', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Nuovo</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Fiocco Nascita Frida</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Splendido fiocco nascita personalizzato con nome Frida, tulle rosa e farfalle glitterate.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Fiocco%20Nascita%20Frida" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODOTTO 12: Cuore Non Toccatemi Non Baciatemi -->
+                <div class="product-card" data-category="regali" data-id="cuore" data-title="Fuoriporta Cuore \"Per favore non toccatemi non baciatemi\"" data-price="€ 1,00" data-desc="Decorazione a cuore in velluto rosa con scritta protettiva, fiocco elegante e farfalle." data-images='["images/SnapInsta.to_730833707_18088729907431643_6729802684398321471_n.jpg", "images/SnapInsta.to_732544800_18088729916431643_6129909187645175979_n.jpg", "images/SnapInsta.to_730313429_18088729895431643_6474910434891481668_n.jpg"]'>
+                    <div class="product-slider" id="slider-cuore" style="position: relative; overflow: hidden; height: 260px;">
+                        <div class="slider-images" onclick="openDetail(this)" style="display: flex; width: 100%; height: 100%; cursor: pointer;">
+                            <img src="images/SnapInsta.to_730833707_18088729907431643_6729802684398321471_n.jpg" alt="Cuore Non Toccatemi" class="slide active" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_732544800_18088729916431643_6129909187645175979_n.jpg" alt="Cuore Non Toccatemi Dettaglio 1" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <img src="images/SnapInsta.to_730313429_18088729895431643_6474910434891481668_n.jpg" alt="Cuore Non Toccatemi Dettaglio 2" class="slide" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        </div>
+                        <button class="slider-btn prev-btn" onclick="event.stopPropagation(); changeSlide('slider-cuore', -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next-btn" onclick="event.stopPropagation(); changeSlide('slider-cuore', 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                        <span class="badge" style="position: absolute; top: 10px; right: 10px;">Popolare</span>
+                    </div>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 onclick="openDetail(this)" style="cursor: pointer; font-size: 1.2rem; margin-bottom: 10px;">Fuoriporta Cuore "Per favore non toccatemi non baciatemi"</h3>
+                        <p class="description" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Decorazione a cuore in velluto rosa con scritta protettiva, fiocco elegante e farfalle.</p>
+                        <div class="product-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price" style="font-weight: 700; color: var(--primary-pink); font-size: 1.1rem;">€ 1,00</span>
+                            <a href="https://wa.me/393453433383?text=Ciao!%20Vorrei%20ordinare%20questo%20articolo:%20Fuoriporta%20Cuore%20Non%20Toccatemi%20Non%20Baciatemi" class="whatsapp-btn" target="_blank" style="padding: 8px 15px; color: white; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fab fa-whatsapp"></i> Ordina
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- SCHERMATA DETTAGLIO PRODOTTO (MODALE A TUTTO SCHERMO) -->
+    <div id="productModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 20px; max-width: 800px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" onclick="closeDetail()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;"><i class="fas fa-times"></i></button>
+            <div class="modal-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="modal-gallery">
+                    <div class="modal-main-image-container" style="position: relative; height: 350px; border-radius: 10px; overflow: hidden; background: #000;">
+                        <img id="modalMainImg" src="" alt="Dettaglio Prodotto" style="width: 100%; height: 100%; object-fit: contain;">
+                        <button class="modal-slider-btn modal-prev" onclick="changeModalSlide(-1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="modal-slider-btn modal-next" onclick="changeModalSlide(1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div id="modalThumbnails" class="modal-thumbnails" style="display: flex; gap: 10px; margin-top: 10px; overflow-x: auto;"></div>
+                </div>
+                <div class="modal-details-info" style="display: flex; flex-direction: column; justify-content: center;">
+                    <h2 id="modalTitle" style="font-size: 1.5rem; margin-bottom: 10px;">Nome Prodotto</h2>
+                    <p id="modalPrice" class="modal-price" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-pink); margin-bottom: 15px;">€ 0,00</p>
+                    <p id="modalDesc" class="modal-description" style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Descrizione completa dell'articolo.</p>
+                    <a id="modalWaBtn" href="#" class="whatsapp-btn modal-wa" target="_blank" style="padding: 12px 20px; color: white; text-decoration: none; border-radius: 30px; text-align: center; font-weight: 600; display: inline-flex; justify-content: center; align-items: center; gap: 8px;">
+                        <i class="fab fa-whatsapp"></i> Contatta su WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container" style="text-align: center; padding: 30px; color: #777; font-size: 0.9rem;">
+            <p>&copy; 2026 <strong>Vietatovietare</strong> - A&S Accessories. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        // SCRIPT ROTAZIONE RECENSIONI
+        const reviews = [
+            "\"Davvero fantastica, puntuale e prezzo onesto!\"",
+            "\"Davvero ottimo il servizio, impeccabile e veloce!\"",
+            "\"Articoli stupendi e massima professionalità!\"",
+            "\"Qualità eccellente, super consigliato a tutti!\""
+        ];
+        let reviewIndex = 0;
+        setInterval(() => {
+            reviewIndex = (reviewIndex + 1) % reviews.length;
+            document.getElementById('reviewText').innerText = reviews[reviewIndex];
+        }, 3500);
+
+        function filterCategory(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const cards = document.querySelectorAll('.product-card');
+            const sectionHeaders = document.querySelectorAll('.section-category-container');
+
+            if (category === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+                sectionHeaders.forEach(header => header.style.display = 'block');
+            } else {
+                cards.forEach(card => {
+                    if (card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                sectionHeaders.forEach(header => {
+                    if (header.classList.contains('cat-header-' + category)) {
+                        header.style.display = 'block';
+                    } else {
+                        header.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function changeSlide(sliderId, direction) {
+            const slider = document.getElementById(sliderId);
+            const slides = slider.querySelectorAll('.slide');
+            let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+            slides[currentIndex].classList.remove('active');
+            slides[currentIndex].style.display = 'none';
+            currentIndex += direction;
+            if (currentIndex >= slides.length) currentIndex = 0;
+            else if (currentIndex < 0) currentIndex = slides.length - 1;
+            slides[currentIndex].classList.add('active');
+            slides[currentIndex].style.display = 'block';
+        }
+
+        // Inizializza la prima immagine di ogni slider visibile
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.product-slider').forEach(slider => {
+                const slides = slider.querySelectorAll('.slide');
+                if(slides.length > 0) {
+                    slides[0].classList.add('active');
+                    slides[0].style.display = 'block';
+                }
+            });
+        });
+
+        let currentModalImages = [];
+        let currentModalIndex = 0;
+
+        function openDetail(element) {
+            const card = element.closest('.product-card');
+            const title = card.getAttribute('data-title');
+            const price = card.getAttribute('data-price');
+            const desc = card.getAttribute('data-desc');
+            const images = JSON.parse(card.getAttribute('data-images'));
+            
+            currentModalImages = images;
+            currentModalIndex = 0;
+
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('modalDesc').innerText = desc;
+            
+            const waText = encodeURIComponent(`Ciao! Vorrei informazioni per questo articolo: ${title}`);
+            document.getElementById('modalWaBtn').href = `https://wa.me/393453433383?text=${waText}`;
+
+            updateModalView();
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeDetail() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function updateModalView() {
+            document.getElementById('modalMainImg').src = currentModalImages[currentModalIndex];
+            
+            const thumbContainer = document.getElementById('modalThumbnails');
+            thumbContainer.innerHTML = '';
+            currentModalImages.forEach((imgSrc, idx) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgSrc;
+                thumb.style.width = '60px';
+                thumb.style.height = '60px';
+                thumb.style.objectFit = 'cover';
+                thumb.style.borderRadius = '5px';
+                thumb.style.cursor = 'pointer';
+                thumb.style.border = idx === currentModalIndex ? '2px solid var(--primary-pink)' : '2px solid transparent';
+                thumb.onclick = () => {
+                    currentModalIndex = idx;
+                    updateModalView();
+                };
+                thumbContainer.appendChild(thumb);
+            });
+        }
+
+        function changeModalSlide(direction) {
+            currentModalIndex += direction;
+            if (currentModalIndex >= currentModalImages.length) {
+                currentModalIndex = 0;
+            } else if (currentModalIndex < 0) {
+                currentModalIndex = currentModalImages.length - 1;
+            }
+            updateModalView();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                closeDetail();
+            }
+        }
+    </script>
+</body>
+</html>
