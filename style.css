@@ -564,8 +564,8 @@ footer {
         pointer-events: none !important;
     }
 
-    /* --- 4. RECENSIONI: SCORRIMENTO ORIZZONTALE E CONTENUTO VERTICALE --- */
-    .reviews, .recensioni, .carousel, .slider, [class*="reviews-container"], [class*="recensioni-container"] {
+    /* --- 4. RECENSIONI ( RIMOSSO .slider e .carousel per non rompere le foto dei prodotti) --- */
+    .reviews, .recensioni, [class*="reviews-container"], [class*="recensioni-container"] {
         display: flex !important;
         flex-direction: row !important;
         overflow-x: auto !important;
@@ -589,28 +589,22 @@ footer {
         box-sizing: border-box !important;
     }
 
-    /* --- 5. BLOCCO CLIC SELETTIVO (NASCONDE POPUP MA LASCIA I TASTI) --- */
-    /* Disabilita il clic su tutta la card per evitare l'apertura del dettaglio */
+    /* --- 5. BLOCCO CLIC SELETTIVO MA LASCIA LIBERE LE FRECCE --- */
     .product, .card, .catalogo-item, .grid-item, [class*="product"], [class*="item"], [class*="card"] {
         pointer-events: none !important;
     }
 
-    /* Riabilita il clic SOLO sui bottoni e sui link (es. tasto per messaggio/WhatsApp) */
+    /* Riabilita il clic e la visibilità SOLO sui bottoni, link e soprattutto sulle FRECCE dello slider */
     .product a, .card a, [class*="product"] a, [class*="card"] a,
     .product button, .card button, [class*="product"] button, [class*="card"] button,
-    .btn, .button, [class*="btn"], [class*="button"] {
+    .btn, .button, [class*="btn"], [class*="button"],
+    .slider-btn, .prev-btn, .next-btn, [class*="slider-btn"], [class*="prev"], [class*="next"] {
         pointer-events: auto !important;
         cursor: pointer !important;
-        position: relative !important;
-        z-index: 10 !important;
-    }
-}
-@media (max-width: 768px) {
-    .slider-btn, .prev-btn, .next-btn {
+        position: absolute !important;
+        z-index: 9999 !important;
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
-        pointer-events: auto !important;
-        z-index: 9999 !important;
     }
 }
