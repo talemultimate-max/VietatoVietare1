@@ -558,9 +558,10 @@ footer {
         box-sizing: border-box !important;
     }
     
-    /* --- 3. BLOCCO SICUREZZA PER MODALI (EVENTUALI) --- */
-    .product-modal, .modal, .popup-container, .lightbox-overlay {
-        display: none !important; /* Forza la chiusura/nasconde i popup se dovessero aprirsi */
+    /* --- 3. BLOCCA E NASCONDI I MODALI (SE DOVESSERO APRIRE) --- */
+    .product-modal, .modal, .popup-container, .lightbox-overlay, [class*="modal"], [class*="popup"] {
+        display: none !important;
+        pointer-events: none !important;
     }
 
     /* --- 4. RECENSIONI: SCORRIMENTO ORIZZONTALE E CONTENUTO VERTICALE --- */
@@ -588,9 +589,8 @@ footer {
         box-sizing: border-box !important;
     }
 
-    /* --- 5. DISABILITA APERTURA DETTAGLI OGGETTI DA TELEFONO --- */
-    /* Rende le immagini e i link dei prodotti non cliccabili su mobile */
-    .catalogo img, .product img, .card img, a.product-link, [class*="product-item"] {
+    /* --- 5. DISABILITA COMPLETAMENTE I CLIC SUI PRODOTTI DA TELEFONO --- */
+    .product, .card, .catalogo-item, .grid-item, [class*="product"], [class*="item"], [class*="card"], [class*="catalogo"] img {
         pointer-events: none !important;
         cursor: default !important;
     }
