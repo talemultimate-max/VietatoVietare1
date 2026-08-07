@@ -558,7 +558,7 @@ footer {
         box-sizing: border-box !important;
     }
     
-    /* --- 3. BLOCCA E NASCONDI I MODALI (SE DOVESSERO APRIRE) --- */
+    /* --- 3. BLOCCA E NASCONDI I MODALI/POPUP --- */
     .product-modal, .modal, .popup-container, .lightbox-overlay, [class*="modal"], [class*="popup"] {
         display: none !important;
         pointer-events: none !important;
@@ -589,9 +589,19 @@ footer {
         box-sizing: border-box !important;
     }
 
-    /* --- 5. DISABILITA COMPLETAMENTE I CLIC SUI PRODOTTI DA TELEFONO --- */
-    .product, .card, .catalogo-item, .grid-item, [class*="product"], [class*="item"], [class*="card"], [class*="catalogo"] img {
+    /* --- 5. BLOCCO CLIC SELETTIVO (NASCONDE POPUP MA LASCIA I TASTI) --- */
+    /* Disabilita il clic su tutta la card per evitare l'apertura del dettaglio */
+    .product, .card, .catalogo-item, .grid-item, [class*="product"], [class*="item"], [class*="card"] {
         pointer-events: none !important;
-        cursor: default !important;
+    }
+
+    /* Riabilita il clic SOLO sui bottoni e sui link (es. tasto per messaggio/WhatsApp) */
+    .product a, .card a, [class*="product"] a, [class*="card"] a,
+    .product button, .card button, [class*="product"] button, [class*="card"] button,
+    .btn, .button, [class*="btn"], [class*="button"] {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        position: relative !important;
+        z-index: 10 !important;
     }
 }
