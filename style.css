@@ -541,3 +541,15 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+/* --- REGOLE PER SMARTPHONE --- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    /* Riduci elementi troppo grandi per lo schermo piccolo */
+    .header-logo {
+        width: 70px !important;
+        height: 70px !important;
+    }
+}
