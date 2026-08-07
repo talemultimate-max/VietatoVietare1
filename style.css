@@ -609,8 +609,8 @@ footer {
         color: #e91e63 !important;
     }
 
-    /* --- 4. RECENSIONI A SCORRIMENTO ORIZZONTALE (NON OCCUPANO SPAZIO) --- */
-    .reviews, .recensioni, [class*="review"], [class*="recension"], .carousel, .slider {
+    /* --- 4. RECENSIONI: SCORRIMENTO ORIZZONTALE MA CONTENUTO VERTICALE COME DA PC --- */
+    .reviews, .recensioni, .carousel, .slider, [class*="reviews-container"], [class*="recensioni-container"] {
         display: flex !important;
         flex-direction: row !important;
         overflow-x: auto !important;
@@ -623,13 +623,14 @@ footer {
     }
 
     .review-card, .recensione-card, [class*="review-item"], [class*="recensione"] {
-        flex: 0 0 82% !important; /* Occupano l'82% dello schermo lasciando intravedere la recensione successiva */
-        max-width: 82% !important;
+        flex: 0 0 85% !important;
+        max-width: 85% !important;
+        display: flex !important;
+        flex-direction: column !important; /* Forza gli elementi interni a impilarsi verticalmente come sul PC */
+        align-items: flex-start !important;
+        text-align: left !important;
         margin: 0 !important;
         scroll-snap-align: center !important;
-        box-sizing: border-box !important;
-    }
-}
         box-sizing: border-box !important;
     }
 }
