@@ -605,3 +605,12 @@ footer {
         z-index: 10 !important;
     }
 }
+@media (max-width: 768px) {
+    .slider-btn, .prev-btn, .next-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        z-index: 9999 !important;
+    }
+}
