@@ -775,3 +775,142 @@
             <p>&copy; 2026 <strong>Vietatovietare</strong> - A&S Accessories. Tutti i diritti riservati.</p>
         </div>
     </footer>
+
+    <script>
+        // SCRIPT ROTAZIONE RECENSIONI
+        const reviews = [
+            "\"Davvero fantastica, puntuale e prezzo onesto!\"",
+            "\"Davvero ottimo il servizio, impeccabile e veloce!\"",
+            "\"Articoli stupendi e massima professionalità!\"",
+            "\"Qualità eccellente, super consigliato a tutti!\""
+        ];
+        let reviewIndex = 0;
+        setInterval(() => {
+            reviewIndex = (reviewIndex + 1) % reviews.length;
+            document.getElementById('reviewText').innerText = reviews[reviewIndex];
+        }, 3500);
+
+        function filterCategory(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const cards = document.querySelectorAll('.product-card');
+            const sectionHeaders = document.querySelectorAll('.section-category-container');
+
+            if (category === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+                sectionHeaders.forEach(header => header.style.display = 'block');
+            } else {
+                cards.forEach(card => {
+                    if (card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                sectionHeaders.forEach(header => {
+                    if (header.classList.contains('cat-header-' + category)) {
+                        header.style.display = 'block';
+                    } else {
+                        header.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function changeSlide(sliderId, direction) {
+            const slider = document.getElementById(sliderId);
+            const slides = slider.querySelectorAll('.slide');
+            let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+            slides[currentIndex].classList.remove('active');
+            slides[currentIndex].style.display = 'none';
+            currentIndex += direction;
+            if (currentIndex >= slides.length) currentIndex = 0;
+            else if (currentIndex < 0) currentIndex = slides.length - 1;
+            slides[currentIndex].classList.add('active');
+            slides[currentIndex].style.display = 'block';
+        }
+
+        // Inizializza la prima immagine di ogni slider visibile
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.product-slider').forEach(slider => {
+                const slides = slider.querySelectorAll('.slide');
+                if(slides.length > 0) {
+                    slides[0].classList.add('active');
+                    slides[0].style.display = 'block';
+                }
+            });
+        });
+
+        let currentModalImages = [];
+        let currentModalIndex = 0;
+
+        function openDetail(element) {
+            const card = element.closest('.product-card');
+            const title = card.getAttribute('data-title');
+            const price = card.getAttribute('data-price');
+            const desc = card.getAttribute('data-desc');
+            const images = JSON.parse(card.getAttribute('data-images'));
+            
+            currentModalImages = images;
+            currentModalIndex = 0;
+
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('modalDesc').innerText = desc;
+            
+            const waText = encodeURIComponent(`Ciao! Vorrei informazioni per questo articolo: ${title}`);
+            document.getElementById('modalWaBtn').href = `https://wa.me/393453433383?text=${waText}`;
+
+            updateModalView();
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeDetail() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function updateModalView() {
+            document.getElementById('modalMainImg').src = currentModalImages[currentModalIndex];
+            
+            const thumbContainer = document.getElementById('modalThumbnails');
+            thumbContainer.innerHTML = '';
+            currentModalImages.forEach((imgSrc, idx) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgSrc;
+                thumb.style.width = '60px';
+                thumb.style.height = '60px';
+                thumb.style.objectFit = 'cover';
+                thumb.style.borderRadius = '5px';
+                thumb.style.cursor = 'pointer';
+                thumb.style.border = idx === currentModalIndex ? '2px solid var(--primary-pink)' : '2px solid transparent';
+                thumb.onclick = () => {
+                    currentModalIndex = idx;
+                    updateModalView();
+                };
+                thumbContainer.appendChild(thumb);
+            });
+        }
+
+        function changeModalSlide(direction) {
+            currentModalIndex += direction;
+            if (currentModalIndex >= currentModalImages.length) {
+                currentModalIndex = 0;
+            } else if (currentModalIndex < 0) {
+                currentModalIndex = currentModalImages.length - 1;
+            }
+            updateModalView();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                closeDetail();
+            }
+        }
+    </script>
+</body>
+</html>
+            <p>&copy; 2026 <strong>Vietatovietare</strong> - A&S Accessories. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
